@@ -1,22 +1,24 @@
 {
-  "name": "vite-reactts-electron-starter",
-  "version": "0.5.0",
+  "name": "tibiawidgets-app",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "main/index.js",
   "author": {
-    "name": "Maximilian Stümpfl"
+    "name": "Guillermo Beltran"
   },
-  "description": "Starter using Vite 2+ React +Typescript + Electron for fast prototyping.",
+  "description": "Tibia Widgets app for analyzing hunt sessions and save client data.",
   "keywords": [
     "vite",
     "react",
     "electron",
-    "typescript"
+    "typescript",
+    "tibia",
+    "widgets"
   ],
   "repository": {
-    "url": "https://github.com/lTimeless/vite-reactts-electron-starter"
+    "url": "https://github.com/tibiawidgets/tibiawidgets-app"
   },
-  "productName": "vite-reactts-electron-starter",
+  "productName": "Tibia Widgets app",
   "scripts": {
     "dev": "concurrently \"yarn dev:vite\" \" yarn dev:electron\"",
     "dev:vite": "vite",
