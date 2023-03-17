@@ -36,18 +36,12 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen">
-      {window.Main && (
-        <div className="flex-none">
-          <AppBar />
-        </div>
-      )}
-      <div className="flex-auto">
-        <div
-          className="min-h-screen flex relative lg:static"
-          style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #485563 100%)' }}
-        >
+      {window.Main && <AppBar />}
+      <div className="flex h-full">
+        <div className="flex relative" style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #485563 100%)' }}>
           <SideBar />
         </div>
+        <div>Content</div>
       </div>
     </div>
   );
