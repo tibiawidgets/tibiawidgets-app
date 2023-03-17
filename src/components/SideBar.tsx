@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleClass } from 'primereact/styleclass';
 import { Ripple } from 'primereact/ripple';
 import { Button } from 'primereact/button';
 
