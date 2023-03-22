@@ -43,14 +43,11 @@ function App() {
     <Router>
       <div className="flex flex-col h-screen">
         {window.Main && <AppBar />}
-        <div className="flex h-full">
-          <div
-            className="flex relative"
-            style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #485563 100%)' }}
-          >
+        <div className="flex flex-grow">
+          <div className=" h-full" style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #485563 100%)' }}>
             <SideBar />
           </div>
-          <div className="p-4 flex flex-grow mx-auto">
+          <div className="p-4 px-auto w-full overflow-y-scroll">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/party-loot" element={<PartyLoot />} />

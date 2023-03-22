@@ -33,7 +33,7 @@ function SideBar() {
       className="h-full flex-shrink-0 absolute lg:static left-0 top-0 z-1 border-right-1 select-none animation-duration-300 animation-ease-in-out border-white-alpha-10"
       style={{ width: '280px', backgroundImage: 'linear-gradient(60deg, #29323c 0%, #2f3844 100%)' }}
     >
-      <div className="flex flex-col flex-grow h-full">
+      <div className="flex flex-col flex-grow relative">
         <div className="h-3/4 ">
           <div className="flex items-center px-5 flex-shrink-0" style={{ height: '60px' }}>
             <span className="outlined-title text-4xl font-bold">Tibia Widgets</span>
@@ -54,7 +54,7 @@ function SideBar() {
             ))}
           </ul>
         </div>
-        <div className="h-1/4 flex items-end p-4 border-top-1 border-white-alpha-10">
+        <div className="fixed bottom-0 w-40 flex items-end p-4 border-top-1 border-white-alpha-10">
           <Button className="font-medium w-full" icon="pi pi-user" label="Login" />
         </div>
       </div>

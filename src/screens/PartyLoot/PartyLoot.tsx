@@ -22,7 +22,7 @@ function PartyLoot() {
     recalculate();
   };
   return (
-    <div className="w-full">
+    <>
       <h1 className="section-title outlined-title text-4xl">Party Loot Share</h1>
       <div className="mainContent">
         <p className="my-5">Calculate your cut in the hunt.</p>
@@ -59,7 +59,7 @@ function PartyLoot() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
