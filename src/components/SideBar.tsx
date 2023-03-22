@@ -1,6 +1,7 @@
 import React from 'react';
 import { Ripple } from 'primereact/ripple';
 import { Button } from 'primereact/button';
+import { NavLink } from 'react-router-dom';
 
 const darshboardMenu = [
   {
@@ -11,7 +12,7 @@ const darshboardMenu = [
   {
     label: 'Party Loot Share',
     icon: 'pi pi-bookmark',
-    url: '/'
+    url: '/party-loot'
   },
   {
     label: 'Solo Hunt Sessions',
@@ -40,15 +41,15 @@ function SideBar() {
           <ul className="list-none p-0 m-0 overflow-hidden">
             {darshboardMenu.map((item) => (
               <li key={item.label}>
-                <a
-                  href={item.url}
+                <NavLink
+                  to={item.url}
                   className="flex align-items-center cursor-pointer p-3 text-gray-300 hover:bg-bluegray-700 transition-duration-150 transition-colors"
                   style={{ borderRadius: '30px' }}
                 >
                   <i className={`${item.icon} mr-2 self-center`} />
                   <span className="font-medium">{item.label}</span>
                   <Ripple />
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>

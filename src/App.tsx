@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import AppBar from './AppBar';
 import SideBar from './components/SideBar';
+import HuntSessions from './screens/HuntSessions/HuntSessions';
+import PartyLoot from './screens/PartyLoot/PartyLoot';
+import Home from './screens/Home/Home';
+import Login from './components/Login';
 
 function App() {
   console.log(window.ipcRenderer);
@@ -35,15 +40,26 @@ function App() {
   }, [fromMain, isSent]);
 
   return (
-    <div className="flex flex-col h-screen">
-      {window.Main && <AppBar />}
-      <div className="flex h-full">
-        <div className="flex relative" style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #485563 100%)' }}>
-          <SideBar />
+    <Router>
+      <div className="flex flex-col h-screen">
+        {window.Main && <AppBar />}
+        <div className="flex h-full">
+          <div
+            className="flex relative"
+            style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #485563 100%)' }}
+          >
+            <SideBar />
+          </div>
+          <div className="p-4 flex flex-grow mx-auto">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/party-loot" element={<PartyLoot />} />
+              <Route path="/hunt-sessions" element={<HuntSessions />} />
+            </Routes>
+          </div>
         </div>
-        <div>Content</div>
       </div>
-    </div>
+    </Router>
   );
 }
 
