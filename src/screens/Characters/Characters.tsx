@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button } from 'primereact/button';
+import { Menu } from 'primereact/menu';
 import { useUserContext } from '../../contexts/UserContext';
 import DruidImage from '../../assets/Druid.png';
 import KnightImage from '../../assets/Knight.png';
@@ -10,6 +11,14 @@ import CharacterAddForm from '../../components/CharacterAddform/CharacterAddForm
 function Characters() {
   const { userData } = useUserContext();
   const [visible, setVisible] = useState(false);
+  const menu = useRef<Menu>(null);
+  const contextMenuItems: MenuItem[] = [
+    {
+      label: 'Edit',
+      icon: 'pi pi-user-edit'
+    },
+    { label: 'Remove', icon: 'pi pi-trash' }
+  ];
 
   const getVocationImage = (vocation: string) => {
     switch (vocation) {
@@ -32,7 +41,7 @@ function Characters() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         {userData.characters.map((char) => {
           return (
-            <div className="flex flex-col justify-between shadow-2 p-4 mb-5 lg:mb-0 mr-0 lg:mr-5 surface-card w-60 h-60">
+            <div className="flex flex-col justify-between shadow-2 p-4 mb-5 lg:mb-0 mr-0 lg:mr-5 surface-card w-60 h-60 hover:surface-0 relative">
               <img className="w-1/2 self-center" height="170px" alt={char.name} src={getVocationImage(char.vocation)} />
               <div>
                 <div className="text-xl text-900 font-medium mb-2">{char.name}</div>
@@ -43,6 +52,14 @@ function Characters() {
                     <span className="text-lime-400">{char.world}</span>
                   </div>
                 </div>
+              </div>
+              <div className="absolute right-2 top-2 ">
+                <Menu model={contextMenuItems} popup ref={menu} />
+                <Button
+                  icon="pi pi-cog"
+                  className="bg-transparent border-none text-white hover:surface-50"
+                  onClick={(e) => menu.current?.toggle(e)}
+                />
               </div>
             </div>
           );
