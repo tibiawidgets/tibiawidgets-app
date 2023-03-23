@@ -9,7 +9,11 @@ export interface IAuthDialogProps {
   onHide: () => void;
 }
 
-type StepType = 'email' | 'verification' | 'loginIn';
+const STEP_LOGININ = 'loginIn';
+const STEP_VERIFICATION = 'verification';
+const STEP_EMAIL = 'email';
+
+type StepType = typeof STEP_EMAIL | typeof STEP_VERIFICATION | typeof STEP_LOGININ;
 
 export function AuthDialog({ visible, onHide }: IAuthDialogProps) {
   const [step, setStep] = useState<StepType>('email');
