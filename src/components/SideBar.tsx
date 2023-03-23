@@ -17,7 +17,7 @@ const darshboardMenu = [
   {
     label: 'Solo Hunt Sessions',
     icon: 'pi pi-user',
-    url: '/'
+    url: '/hunt-sessions'
   },
   {
     label: 'Settings',

@@ -8,6 +8,8 @@ body {
   flex-direction: column;
   overflow-y: hidden;
   font-family: (var(--font-family));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* For AppBar */
@@ -39,6 +41,7 @@ body {
 .content-container {
   display: flex;
   flex: 1;
+  overflow: hidden;
 }
 
 .sidebar-container {

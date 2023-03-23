@@ -6,6 +6,7 @@ import HuntSessions from './screens/HuntSessions/HuntSessions';
 import PartyLoot from './screens/PartyLoot/PartyLoot';
 import Home from './screens/Home/Home';
 import Login from './components/Login';
+import 'primeflex/primeflex.css';
 
 function App() {
   console.log(window.ipcRenderer);
