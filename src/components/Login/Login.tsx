@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useRef, useState } from 'react';
+import React, { FormEvent, SyntheticEvent, useRef, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { login as userLogin } from '../../services/tibia-widgets-api';
@@ -18,7 +18,7 @@ function Login({ onSubmitSuccess }: LoginType) {
     }
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     userLogin(username)
