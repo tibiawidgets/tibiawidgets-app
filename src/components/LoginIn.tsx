@@ -14,7 +14,7 @@ export function LogingIn({ email, onSuccessLogin }: ILogingInProps) {
   });
   return (
     <div className="flex flex-col items-center">
-      <span className="pi pi-user w-12 h-20" />
+      <span className="pi pi-spin pi-spinner text-4xl mb-4" />
       <h2>Welcome {email}...</h2>
     </div>
   );
