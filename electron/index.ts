@@ -5,8 +5,8 @@ import { join } from 'path';
 import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron';
 import isDev from 'electron-is-dev';
 
-const height = 800;
-const width = 1200;
+const height = 920;
+const width = 1080;
 
 function createWindow() {
   // Create the browser window.
@@ -16,7 +16,7 @@ function createWindow() {
     //  change to false to use AppBar
     frame: false,
     show: true,
-    resizable: true,
+    resizable: false,
     fullscreenable: true,
     webPreferences: {
       preload: join(__dirname, 'preload.js')

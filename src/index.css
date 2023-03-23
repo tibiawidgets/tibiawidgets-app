@@ -30,3 +30,26 @@ body {
   text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000,
     -1px 1px #000;
 }
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.content-container {
+  display: flex;
+  flex: 1;
+}
+
+.sidebar-container {
+  flex-basis: 280px;
+  height: 100%;
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+  background-color: #fff;
+  overflow-y: scroll;
+  @apply bg-gray-100 text-black;
+}

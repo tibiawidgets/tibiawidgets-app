@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Login from './Login';
 import SignIn from './SignIn';
 import './Login.css';
 
 type OptionType = 'login' | 'signin';
 
-const MainLogin = () => {
+function MainLogin() {
   const [option, setOption] = useState<OptionType>('login');
   return (
     <div>
-      <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div className="w-full block flex-grow lg:items-center">
         <div className="flex text-lg font-bold justify-evenly">
           <button
             type="button"
@@ -23,9 +23,7 @@ const MainLogin = () => {
           <button
             type="button"
             className={`block mt-4 lg:inline-block lg:mt-0 hover:text-white mr-4 ${
-              option === 'signin'
-                ? 'active-tab outlined-title'
-                : 'outlined-text'
+              option === 'signin' ? 'active-tab outlined-title' : 'outlined-text'
             }`}
             onClick={() => setOption('signin')}
           >
@@ -39,6 +37,6 @@ const MainLogin = () => {
       </div>
     </div>
   );
-};
+}
 
 export default MainLogin;
