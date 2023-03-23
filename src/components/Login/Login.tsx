@@ -1,21 +1,16 @@
-import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { SyntheticEvent, useRef, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { login as userLogin } from '../../services/tibia-widgets-api';
 
-type StepType = 'email' | 'verification';
+type LoginType = {
+  onSubmitSuccess: (email: string) => void;
+};
 
-function Login() {
+function Login({ onSubmitSuccess }: LoginType) {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef(null);
-  const [step, setStep] = useState<StepType>('email');
-
-  useEffect(() => {
-    if (emailRef.current) {
-      emailRef.current.focus();
-    }
-  }, []);
 
   const onChange = (event: SyntheticEvent<HTMLInputElement>) => {
     if (event.currentTarget.name === 'username') {
@@ -26,9 +21,12 @@ function Login() {
   const onSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    userLogin(username).then(() => {
-      setIsLoading(false);
-    });
+    userLogin(username)
+      .then(() => {
+        onSubmitSuccess(username);
+      })
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
 
   return (
