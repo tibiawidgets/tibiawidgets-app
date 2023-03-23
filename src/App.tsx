@@ -5,6 +5,7 @@ import SideBar from './components/SideBar';
 import HuntSessions from './screens/HuntSessions/HuntSessions';
 import PartyLoot from './screens/PartyLoot/PartyLoot';
 import Home from './screens/Home/Home';
+import Characters from './screens/Characters/Characters';
 import 'primeflex/primeflex.css';
 import { UserContextProvider } from './contexts/UserContext';
 
@@ -54,6 +55,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/party-loot" element={<PartyLoot />} />
                 <Route path="/hunt-sessions" element={<HuntSessions />} />
+                <Route path="/characters" element={<Characters />} />
               </Routes>
             </div>
           </div>

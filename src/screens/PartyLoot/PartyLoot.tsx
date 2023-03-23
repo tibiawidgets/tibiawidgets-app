@@ -33,6 +33,7 @@ function PartyLoot() {
             value={text}
             spellCheck={false}
             onChange={updateInput}
+            onFocus={(e) => e.currentTarget.select()}
           />
           <div className="w-1/2 ml-4">
             <div

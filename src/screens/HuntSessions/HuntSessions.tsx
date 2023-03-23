@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { Message } from 'primereact/message';
 import { Tag } from 'primereact/tag';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { useUserContext } from '../../contexts/UserContext';
 import DropFileZone from '../../components/DropFileZone/DropFileZone';
+import { Character, Session } from '../../types/types';
+import SessionsContent from '../../components/HuntSessions/SessionsContent';
 
 type EmptyHuntsScreenType = {
   nSessions: number;
@@ -27,11 +30,30 @@ const messageContent = (
 
 function HuntSessions() {
   const { userData } = useUserContext();
+  const [selectedChar, setSelectedChar] = useState<Character | undefined>(undefined);
+
+  const handleCharSelect = (event: DropdownChangeEvent) => {
+    const char = userData.characters.find((_char: Character) => _char.id === event.value);
+    setSelectedChar(char);
+  };
+
   return (
     <div className="w-full">
       <h1 className="section-title outlined-title text-4xl">Solo Hunt Sessions</h1>
-      <Message className="border-primary w-full justify-content-start mt-4" content={messageContent} />
-      <EmptyHuntsScreen nSessions={userData.huntSessions.length} />
+      <Dropdown
+        value={selectedChar}
+        onChange={handleCharSelect}
+        options={userData.characters}
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select a Character"
+        className="w-full md:w-14rem"
+      />
+      {!userData.characters.length && (
+        <Message className="border-primary w-full justify-content-start mt-4" content={messageContent} />
+      )}
+      <EmptyHuntsScreen nSessions={userData.characters.length} />
+      <SessionsContent character={selectedChar} />
     </div>
   );
 }

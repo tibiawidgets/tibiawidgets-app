@@ -52,7 +52,7 @@ export function AuthDialog({ visible, onHide }: IAuthDialogProps) {
       return <CodeValidationForm email={emailTo} onSubmitSuccess={onCodeValidated} />;
     }
     return <LogingIn email={emailTo} onSuccessLogin={onUserLoaded} />;
-  }, [step]);
+  }, [step, emailTo]);
   return (
     <Dialog className="w-80" visible={visible} header={title} onHide={onClose}>
       {child}

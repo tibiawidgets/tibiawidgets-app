@@ -19,7 +19,10 @@ export const validateCode = async (email: string, code: string) => {
 
 export const getUserByEmail = async (email: string) => {
   const data = { email };
-  const result = await withAuth('get', `${HOST}/user`, data);
+  const result = await withAuth('get', `${HOST}/user`, data).catch((e) => {
+    localStorage.removeItem('email');
+    localStorage.removeItem('token');
+  });
   return result;
 };
 

@@ -1,17 +1,14 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
-import { Session } from '../types/types';
-
-type UserDataType = {
-  email: string;
-  huntSessions: Session[];
-  config: Record<string, unknown>;
-};
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { AxiosResponse } from 'axios';
+import { UserType } from '../types/types';
+import { getUserByEmail } from '../services/tibia-widgets-api';
 
 type UserContextType = {
   openLoginDialog: () => void;
   closeLoginDialog: () => void;
-  userData: UserDataType;
+  userData: UserType;
   isLoginOpen: boolean;
+  fetchUserData: (email: string) => Promise<void>;
 };
 
 const initialValue: UserContextType = {
@@ -20,18 +17,37 @@ const initialValue: UserContextType = {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   closeLoginDialog: () => {},
   userData: {
-    email: '',
-    huntSessions: [],
-    config: {}
+    _id: '0',
+    email: localStorage.getItem('email') || '',
+    characters: [],
+    clientOptions: {}
   },
-  isLoginOpen: false
+  isLoginOpen: false,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  fetchUserData: () => new Promise(() => {})
 };
 
 const UserContext = createContext<UserContextType>(initialValue);
 
 export function UserContextProvider({ children }) {
-  const [userData, setUserData] = useState<UserDataType>(initialValue.userData);
+  const [userData, setUserData] = useState<UserType>(initialValue.userData);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (userData && userData.email) {
+      fetchUserData(userData.email);
+    }
+  }, [userData.email]);
+
+  const fetchUserData = (email: string) => {
+    return getUserByEmail(email).then((response: AxiosResponse<{ user: UserType }>) => {
+      const { user } = response.data;
+      setUserData(user);
+
+      // save email for persistance
+      localStorage.setItem('email', email);
+    });
+  };
 
   const openLoginDialog = () => {
     setIsLoginModalOpen(true);
@@ -45,7 +61,8 @@ export function UserContextProvider({ children }) {
       openLoginDialog,
       closeLoginDialog,
       userData,
-      isLoginOpen: isLoginModalOpen
+      isLoginOpen: isLoginModalOpen,
+      fetchUserData
     }),
     [userData, isLoginModalOpen]
   );

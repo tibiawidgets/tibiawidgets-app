@@ -17,8 +17,13 @@ const darshboardMenu = [
     url: '/party-loot'
   },
   {
-    label: 'Solo Hunt Sessions',
+    label: 'Characters',
     icon: 'pi pi-user',
+    url: '/characters'
+  },
+  {
+    label: 'Solo Hunt Sessions',
+    icon: 'pi pi-chart-bar',
     url: '/hunt-sessions'
   }
 ];

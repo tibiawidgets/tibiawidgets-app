@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getUserByEmail } from '../services/tibia-widgets-api';
+import { useUserContext } from '../contexts/UserContext';
 
 export interface ILogingInProps {
   email: string;
@@ -7,8 +7,9 @@ export interface ILogingInProps {
 }
 
 export function LogingIn({ email, onSuccessLogin }: ILogingInProps) {
+  const { fetchUserData } = useUserContext();
   React.useEffect(() => {
-    getUserByEmail(email).then(() => {
+    fetchUserData(email).then(() => {
       onSuccessLogin();
     });
   });

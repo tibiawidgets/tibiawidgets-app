@@ -1,4 +1,21 @@
+export type UserType = {
+  _id: string;
+  email: string;
+  characters: Character[];
+  clientOptions: object;
+};
+
+export type Character = {
+  id: string;
+  name: string;
+  world: string;
+  sex: string;
+  vocation: string;
+  huntSessions: Session[];
+};
+
 export type Session = {
+  id: string;
   balance: number;
   damage: number;
   damagePerHour: number;
