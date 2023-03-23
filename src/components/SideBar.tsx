@@ -2,6 +2,9 @@ import React from 'react';
 import { Ripple } from 'primereact/ripple';
 import { Button } from 'primereact/button';
 import { NavLink } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
+import Login from './Login/Login';
+import { useUserContext } from '../contexts/UserContext';
 
 const darshboardMenu = [
   {
@@ -18,15 +21,12 @@ const darshboardMenu = [
     label: 'Solo Hunt Sessions',
     icon: 'pi pi-user',
     url: '/hunt-sessions'
-  },
-  {
-    label: 'Settings',
-    icon: 'pi pi-cog',
-    url: '/'
   }
 ];
 
 function SideBar() {
+  const { openLoginDialog, closeLoginDialog, isLoginOpen } = useUserContext();
+
   return (
     <div
       id="app-sidebar-8"
@@ -53,9 +53,12 @@ function SideBar() {
           ))}
         </ul>
         <div className="absolute bottom-0 p-4 right-0 left-0">
-          <Button className="font-medium w-full" icon="pi pi-user" label="Login" />
+          <Button className="font-medium w-full" icon="pi pi-user" label="Login" onClick={() => openLoginDialog()} />
         </div>
       </div>
+      <Dialog className="w-80" visible={isLoginOpen} header="Login" onHide={() => closeLoginDialog()}>
+        <Login />
+      </Dialog>
     </div>
   );
 }

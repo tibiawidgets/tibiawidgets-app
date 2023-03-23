@@ -1,65 +1,70 @@
-import { SyntheticEvent, useState } from 'react';
-import PasswordTextField from './PasswordTextField';
+import React, { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button';
+import { login as userLogin } from '../../services/tibia-widgets-api';
 
-const Login = () => {
+type StepType = 'email' | 'verification';
+
+function Login() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const emailRef = useRef(null);
+  const [step, setStep] = useState<StepType>('email');
+
+  useEffect(() => {
+    if (emailRef.current) {
+      emailRef.current.focus();
+    }
+  }, []);
 
   const onChange = (event: SyntheticEvent<HTMLInputElement>) => {
     if (event.currentTarget.name === 'username') {
       setUsername(event.currentTarget.value);
-    } else if (event.currentTarget.name === 'password') {
-      setPassword(event.currentTarget.value);
     }
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    userLogin(username).then(() => {
+      setIsLoading(false);
+    });
+  };
+
   return (
-    <form>
+    <form onSubmit={onSubmit}>
       <div>
-        <label className="" htmlFor="username">
-          <span className="font-bold text-gray-500">Username</span>
-          <input
+        <div className="p-inputgroup">
+          <span className="p-inputgroup-addon">
+            <i className="pi pi-user" />
+          </span>
+          <InputText
             required
             name="username"
             id="username"
+            aria-describedby="username-help"
             value={username}
-            className="rounded-r-md flex-1 appearance-none border border-gray-200 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base mt-1"
+            className="rounded-r-md flex-1 appearance-none border border-gray-200 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base"
             type="email"
             placeholder="email@tibia.com"
             onChange={onChange}
           />
-        </label>
+        </div>
+        <small className="text-gray-500">We will send an email to authenticate you.</small>
       </div>
-      <div className="mt-4">
-        <PasswordTextField
-          id="password"
-          name="password"
-          label="Password"
-          value={password}
-          onChange={onChange}
-          required
+      <div className="">
+        <Button
+          ref={emailRef}
+          className="bg-blue-500 text-white hover:bg-blue-700 mt-6 w-full"
+          label="Send Email"
+          iconPos="right"
+          icon="pi pi-send"
+          type="submit"
+          loading={isLoading}
         />
       </div>
-      <button
-        className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-700 w-full mt-6"
-        type="submit"
-      >
-        Login
-      </button>
-      <div className="relative">
-        <hr className="my-8 border-gray-300" />
-        <span className="absolute text-gray-500 left-1/2 -top-3 bg-white -ml-2">
-          OR
-        </span>
-      </div>
-      <button
-        className="bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-700 w-full"
-        type="submit"
-      >
-        Sign In with Google
-      </button>
     </form>
   );
-};
+}
 
 export default Login;

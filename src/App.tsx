@@ -5,8 +5,8 @@ import SideBar from './components/SideBar';
 import HuntSessions from './screens/HuntSessions/HuntSessions';
 import PartyLoot from './screens/PartyLoot/PartyLoot';
 import Home from './screens/Home/Home';
-import Login from './components/Login';
 import 'primeflex/primeflex.css';
+import { UserContextProvider } from './contexts/UserContext';
 
 function App() {
   console.log(window.ipcRenderer);
@@ -42,21 +42,23 @@ function App() {
 
   return (
     <Router>
-      <div className="mainContainer">
-        <div>{window.Main && <AppBar />}</div>
-        <div className="content-container">
-          <div className="sidebar-container">
-            <SideBar />
-          </div>
-          <div className="content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/party-loot" element={<PartyLoot />} />
-              <Route path="/hunt-sessions" element={<HuntSessions />} />
-            </Routes>
+      <UserContextProvider>
+        <div className="mainContainer">
+          <div>{window.Main && <AppBar />}</div>
+          <div className="content-container">
+            <div className="sidebar-container">
+              <SideBar />
+            </div>
+            <div className="content">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/party-loot" element={<PartyLoot />} />
+                <Route path="/hunt-sessions" element={<HuntSessions />} />
+              </Routes>
+            </div>
           </div>
         </div>
-      </div>
+      </UserContextProvider>
     </Router>
   );
 }
