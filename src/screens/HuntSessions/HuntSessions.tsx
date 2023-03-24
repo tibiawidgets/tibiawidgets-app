@@ -1,58 +1,53 @@
-import React, { useMemo, useState } from 'react';
-import { Message } from 'primereact/message';
-import { Tag } from 'primereact/tag';
+import React, { useState } from 'react';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { useUserContext } from '../../contexts/UserContext';
-import DropFileZone from '../../components/DropFileZone/DropFileZone';
 import { Character, Session } from '../../types/types';
 import SessionsContent from '../../components/HuntSessions/SessionsContent';
 
-type EmptyHuntsScreenType = {
-  nSessions: number;
-};
-
-function EmptyHuntsScreen({ nSessions }: EmptyHuntsScreenType) {
-  if (nSessions) return null;
-  return <DropFileZone />;
-}
-
-const messageContent = (
-  <div className="flex align-items-center">
-    <i className="pi pi-exclamation-triangle text-lg font-bold text-yellow-700 " />
-    <div className="ml-2 flex items-center">
-      <span className="mr-2">
-        You can add your <b>*.JSON</b> and <b>*.txt</b> files exported from the <b>Tibia Client</b> located at
-      </span>{' '}
-      <Tag>...\Tibia\packages\Tibia\log</Tag>
-    </div>
-  </div>
-);
-
 function HuntSessions() {
   const { userData } = useUserContext();
-  const [selectedChar, setSelectedChar] = useState<Character | undefined>(undefined);
+  const [selectedChar, setSelectedChar] = useState<Character | null>(null);
+  const options = [{ id: 'all', name: 'Show All' }, ...userData.characters];
 
   const handleCharSelect = (event: DropdownChangeEvent) => {
     const char = userData.characters.find((_char: Character) => _char.id === event.value);
-    setSelectedChar(char);
+    setSelectedChar(char || null);
+  };
+  const selectedCharTemplate = (option, props) => {
+    if (props.value) {
+      return (
+        <div className="flex align-items-center">
+          <div>{props.value}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
+  };
+  const charOptionTemplate = (option) => {
+    return (
+      <div className="flex align-items-center">
+        <div>{option.name}</div>
+      </div>
+    );
   };
 
   return (
     <div className="w-full">
       <h1 className="section-title outlined-title text-4xl">Solo Hunt Sessions</h1>
       <Dropdown
-        value={selectedChar}
+        id="charname"
+        name="charname"
+        value={selectedChar?.name}
         onChange={handleCharSelect}
-        options={userData.characters}
+        options={options}
         optionLabel="name"
         optionValue="id"
         placeholder="Select a Character"
-        className="w-full md:w-14rem"
+        valueTemplate={selectedCharTemplate}
+        itemTemplate={charOptionTemplate}
+        style={{ width: '250px' }}
       />
-      {!userData.characters.length && (
-        <Message className="border-primary w-full justify-content-start mt-4" content={messageContent} />
-      )}
-      <EmptyHuntsScreen nSessions={userData.characters.length} />
       <SessionsContent character={selectedChar} />
     </div>
   );
