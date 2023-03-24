@@ -1,4 +1,5 @@
 import fetch from 'axios';
+import { Character } from '../types/types';
 
 const HOST = 'http://localhost:3000';
 
@@ -31,9 +32,27 @@ export const getWorlds = async () => {
   return worlds.data.worlds;
 };
 
+export const addCharacter = async (character: Character) => {
+  const response = await withAuth('post', `${HOST}/user/characters`, character);
+  return response.data;
+};
+
+export const getCharacters = async () => {
+  const chars = await withAuth('get', `${HOST}/user/characters`, null);
+  return chars;
+};
+
+export const deleteCharacter = async (id: string) => {
+  const chars = await withAuth('delete', `${HOST}/user/characters/${id}`, null);
+  return chars;
+};
+
 export default {
   login,
   validateCode,
   getUserByEmail,
-  getWorlds
+  getWorlds,
+  addCharacter,
+  getCharacters,
+  deleteCharacter
 };

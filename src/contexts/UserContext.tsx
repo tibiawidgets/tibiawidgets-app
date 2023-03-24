@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { UserType } from '../types/types';
-import { getUserByEmail } from '../services/tibia-widgets-api';
+import { Character, UserType } from '../types/types';
+import { getCharacters, getUserByEmail } from '../services/tibia-widgets-api';
 
 type UserContextType = {
   openLoginDialog: () => void;
@@ -10,6 +10,7 @@ type UserContextType = {
   isLoginOpen: boolean;
   fetchUserData: (email: string) => Promise<void>;
   isLoggedIn: boolean;
+  updateCharacters: () => Promise<void>;
 };
 
 const initialValue: UserContextType = {
@@ -26,7 +27,8 @@ const initialValue: UserContextType = {
   isLoginOpen: false,
   isLoggedIn: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  fetchUserData: () => new Promise(() => {})
+  fetchUserData: () => new Promise(() => {}),
+  updateCharacters: () => new Promise(() => {})
 };
 
 const UserContext = createContext<UserContextType>(initialValue);
@@ -52,6 +54,20 @@ export function UserContextProvider({ children }) {
     });
   };
 
+  const updateCharacters = () => {
+    return getCharacters().then((response: AxiosResponse<Character[]>) => {
+      const updated = { ...userData, characters: response.data as Character[] };
+      setUserData(updated as UserType);
+    });
+  };
+
+  const removeCharacter = (id: string) => {
+    return getCharacters().then((response: AxiosResponse<Character[]>) => {
+      const updated = { ...userData, characters: response.data as Character[] };
+      setUserData(updated as UserType);
+    });
+  };
+
   const openLoginDialog = () => {
     setIsLoginModalOpen(true);
   };
@@ -66,7 +82,8 @@ export function UserContextProvider({ children }) {
       userData,
       isLoginOpen: isLoginModalOpen,
       fetchUserData,
-      isLoggedIn
+      isLoggedIn,
+      updateCharacters
     }),
     [userData, isLoginModalOpen, isLoggedIn]
   );

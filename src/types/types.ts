@@ -9,7 +9,7 @@ export type Character = {
   id: string;
   name: string;
   world: string;
-  sex: string;
+  gender: string;
   vocation: string;
   huntSessions: Session[];
 };

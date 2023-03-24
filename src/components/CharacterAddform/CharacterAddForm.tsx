@@ -5,36 +5,30 @@ import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { Button } from 'primereact/button';
-import { getWorlds } from '../../services/tibia-widgets-api';
+import { getWorlds, addCharacter } from '../../services/tibia-widgets-api';
+import 'flag-icons/css/flag-icons.min.css';
+import { Character } from '../../types/types';
+import { useUserContext } from '../../contexts/UserContext';
 
 export interface IChraracterAddFormProps {
   visible: boolean;
   title: string;
   onClose: () => void;
 }
+type WorldLocationType = 'Europe' | 'South America' | 'North America';
 
 const initialValues = {
-  worlds: [
-    { name: 'Australia', code: 'AU' },
-    { name: 'Brazil', code: 'BR' },
-    { name: 'China', code: 'CN' },
-    { name: 'Egypt', code: 'EG' },
-    { name: 'France', code: 'FR' },
-    { name: 'Germany', code: 'DE' },
-    { name: 'India', code: 'IN' },
-    { name: 'Japan', code: 'JP' },
-    { name: 'Spain', code: 'ES' },
-    { name: 'United States', code: 'US' }
-  ],
+  worlds: [],
   genders: ['Male', 'Female'],
   vocations: ['Knight', 'Paladin', 'Druid', 'Sorcerer']
 };
 
 export default function CharacterAddForm({ visible, title, onClose }: IChraracterAddFormProps) {
   const [worlds, setWorlds] = useState(initialValues.worlds);
+  const { updateCharacters } = useUserContext();
   const formik = useFormik({
     initialValues: {
-      charname: '',
+      name: '',
       world: '',
       vocation: '',
       gender: ''
@@ -42,8 +36,8 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
     validate: (data) => {
       const errors = {};
 
-      if (!data.charname) {
-        errors.charname = 'Character name is required.';
+      if (!data.name) {
+        errors.name = 'Character name is required.';
       }
       if (!data.world) {
         errors.world = 'World is required.';
@@ -58,6 +52,10 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
       return errors;
     },
     onSubmit: (data) => {
+      addCharacter(data as Character).then(() => {
+        updateCharacters();
+      });
+      onClose();
       formik.resetForm();
     }
   });
@@ -78,17 +76,62 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
     );
   };
 
+  const getServerZoneCode = (location: WorldLocationType) => {
+    switch (location) {
+      case 'Europe':
+        return 'eu';
+      case 'North America':
+        return 'us';
+      case 'South America':
+      default:
+        return 'br';
+    }
+  };
+
+  const selectedCountryTemplate = (option, props) => {
+    if (option) {
+      const flagCode = getServerZoneCode(option.location);
+      return (
+        <div className="flex align-items-center">
+          <img
+            alt={option.name}
+            src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
+            className={`mr-2 fi fi-${flagCode}`}
+            style={{ width: '18px' }}
+          />
+          <div>{option.name}</div>
+        </div>
+      );
+    }
+
+    return <span>{props.placeholder}</span>;
+  };
+  const countryOptionTemplate = (option) => {
+    const flagCode = getServerZoneCode(option.location);
+    return (
+      <div className="flex align-items-center">
+        <img
+          alt={option.name}
+          src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png"
+          className={`mr-2 fi fi-${flagCode}`}
+          style={{ width: '18px' }}
+        />
+        <div>{option.name}</div>
+      </div>
+    );
+  };
+
   return (
     <Dialog className="w-1/2" visible={visible} header={title} onHide={onClose}>
       <form onSubmit={formik.handleSubmit} className="flex flex-column gap-2">
         <InputText
-          id="charname"
-          name="charname"
-          value={formik.values.charname}
+          id="name"
+          name="name"
+          value={formik.values.name}
           onChange={formik.handleChange}
           placeholder="Character name"
         />
-        {getFormErrorMessage('charname')}
+        {getFormErrorMessage('name')}
         <Dropdown
           filter
           id="world"
@@ -99,6 +142,8 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
           placeholder="Select world"
           optionLabel="name"
           optionValue="name"
+          valueTemplate={selectedCountryTemplate}
+          itemTemplate={countryOptionTemplate}
         />
         {getFormErrorMessage('world')}
         <Dropdown
