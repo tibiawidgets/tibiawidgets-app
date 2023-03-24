@@ -1,8 +1,7 @@
 /**
  * Using Tibia Api to get the data
  * https://docs.tibiadata.com/
- */
-import fetch from 'electron-fetch';
+ */ import axios from 'axios';
 
 // const host = 'https://api.tibiadata.com';
 const host = 'https://dev.tibiadata.com/v4';
@@ -10,14 +9,14 @@ const host = 'https://dev.tibiadata.com/v4';
 export const imagesUrl = 'https://static.tibia.com/images/library/';
 
 export const getBosses = async () => {
-  const bosses = await fetch(`${host}/boostablebosses`);
+  const bosses = await axios.get(`${host}/boostablebosses`);
   const json = await bosses.json();
   // eslint-disable-next-line @typescript-eslint/naming-convention
   return json.boostable_bosses;
 };
 
 export const getCreatures = async () => {
-  const creatures = await fetch(`${host}/creatures`);
+  const creatures = await axios.get(`${host}/creatures`);
   const json = await creatures.json();
   return json.creatures;
 };
@@ -38,7 +37,7 @@ export const getRashidLocation = () => {
 };
 
 export const getCharacterInformation = async (characterName) => {
-  const characterInfo = await fetch(`${host}/character/${characterName}`);
+  const characterInfo = await axios.get(`${host}/character/${characterName}`);
   const json = await characterInfo.json();
   return json;
 };

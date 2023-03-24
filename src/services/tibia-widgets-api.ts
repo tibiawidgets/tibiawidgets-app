@@ -26,8 +26,14 @@ export const getUserByEmail = async (email: string) => {
   return result;
 };
 
+export const getWorlds = async () => {
+  const worlds = await fetch.get(`${HOST}/misc/worlds`);
+  return worlds.data.worlds;
+};
+
 export default {
   login,
   validateCode,
-  getUserByEmail
+  getUserByEmail,
+  getWorlds
 };

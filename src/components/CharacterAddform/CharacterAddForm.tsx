@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
+import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import { Button } from 'primereact/button';
+import { getWorlds } from '../../services/tibia-widgets-api';
 
 export interface IChraracterAddFormProps {
   visible: boolean;
@@ -24,7 +25,9 @@ const initialValues = {
     { name: 'Japan', code: 'JP' },
     { name: 'Spain', code: 'ES' },
     { name: 'United States', code: 'US' }
-  ]
+  ],
+  genders: ['Male', 'Female'],
+  vocations: ['Knight', 'Paladin', 'Druid', 'Sorcerer']
 };
 
 export default function CharacterAddForm({ visible, title, onClose }: IChraracterAddFormProps) {
@@ -58,8 +61,12 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
       formik.resetForm();
     }
   });
-  const genders = ['Male', 'Female'];
-  const vocations = ['Knight', 'Paladin', 'Druid', 'Sorcerer'];
+
+  React.useEffect(() => {
+    getWorlds().then((_worlds) => {
+      setWorlds(_worlds.regular_worlds);
+    });
+  }, []);
 
   const isFormFieldInvalid = (name) => !!(formik.touched[name] && formik.errors[name]);
 
@@ -91,7 +98,7 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
           options={worlds}
           placeholder="Select world"
           optionLabel="name"
-          optionValue="code"
+          optionValue="name"
         />
         {getFormErrorMessage('world')}
         <Dropdown
@@ -99,7 +106,7 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
           name="gender"
           value={formik.values.gender}
           onChange={formik.handleChange}
-          options={genders}
+          options={initialValues.genders}
           placeholder="Character Gender"
         />
         {getFormErrorMessage('gender')}
@@ -108,7 +115,7 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
           name="vocation"
           value={formik.values.vocation}
           onChange={formik.handleChange}
-          options={vocations}
+          options={initialValues.vocations}
           placeholder="Character Vocation"
         />
         {getFormErrorMessage('vocation')}
