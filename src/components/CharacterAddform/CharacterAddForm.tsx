@@ -14,24 +14,26 @@ export interface IChraracterAddFormProps {
   visible: boolean;
   title: string;
   onClose: () => void;
+  mode: 'new' | 'edit';
+  editCharacter?: Character;
 }
 type WorldLocationType = 'Europe' | 'South America' | 'North America';
 
 const initialValues = {
-  worlds: [],
   genders: ['Male', 'Female'],
   vocations: ['Knight', 'Paladin', 'Druid', 'Sorcerer']
 };
 
-export default function CharacterAddForm({ visible, title, onClose }: IChraracterAddFormProps) {
-  const [worlds, setWorlds] = useState(initialValues.worlds);
-  const { updateCharacters } = useUserContext();
+export default function CharacterAddForm({ visible, title, onClose, mode, editCharacter }: IChraracterAddFormProps) {
+  const [worlds, setWorlds] = useState([]);
+  const { modifyCharacter, fetchCharacters } = useUserContext();
+  const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
-      name: '',
-      world: '',
-      vocation: '',
-      gender: ''
+      name: editCharacter?.name || '',
+      world: editCharacter?.world || '',
+      vocation: editCharacter?.vocation || '',
+      gender: editCharacter?.gender || ''
     },
     validate: (data) => {
       const errors = {};
@@ -51,14 +53,31 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
 
       return errors;
     },
-    onSubmit: (data) => {
-      addCharacter(data as Character).then(() => {
-        updateCharacters();
-      });
+    onSubmit: async (data) => {
+      if (mode === 'new') {
+        await addCharacter(data as Character).then(() => {
+          fetchCharacters();
+        });
+      }
+      if (mode === 'edit' && editCharacter) {
+        modifyCharacter(editCharacter.id, data as Character).then(() => {
+          fetchCharacters();
+        });
+      }
       onClose();
       formik.resetForm();
+      setIsLoading(false);
     }
   });
+
+  React.useEffect(() => {
+    if (editCharacter) {
+      formik.setFieldValue('name', editCharacter.name);
+      formik.setFieldValue('gender', editCharacter.gender);
+      formik.setFieldValue('vocation', editCharacter.vocation);
+      formik.setFieldValue('world', editCharacter.world);
+    }
+  }, [editCharacter]);
 
   React.useEffect(() => {
     getWorlds().then((_worlds) => {
@@ -66,7 +85,7 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
     });
   }, []);
 
-  const isFormFieldInvalid = (name) => !!(formik.touched[name] && formik.errors[name]);
+  const isFormFieldInvalid = (name: string) => !!(formik.touched[name] && formik.errors[name]);
 
   const getFormErrorMessage = (name) => {
     return isFormFieldInvalid(name) ? (
@@ -164,7 +183,13 @@ export default function CharacterAddForm({ visible, title, onClose }: IChraracte
           placeholder="Character Vocation"
         />
         {getFormErrorMessage('vocation')}
-        <Button type="submit" className="w-40 self-end" icon="pi pi-user" label="Add Character" />
+        <Button
+          type="submit"
+          className="block self-end"
+          icon="pi pi-user"
+          label={editCharacter ? 'Update Character' : 'Add Character'}
+          loading={isLoading}
+        />
       </form>
     </Dialog>
   );

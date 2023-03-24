@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import { Character, UserType } from '../types/types';
-import { getCharacters, getUserByEmail } from '../services/tibia-widgets-api';
+import { getCharacters, getUserByEmail, deleteCharacter, updateCharacter } from '../services/tibia-widgets-api';
 
 type UserContextType = {
   openLoginDialog: () => void;
@@ -10,7 +10,9 @@ type UserContextType = {
   isLoginOpen: boolean;
   fetchUserData: (email: string) => Promise<void>;
   isLoggedIn: boolean;
-  updateCharacters: () => Promise<void>;
+  fetchCharacters: () => Promise<void>;
+  removeCharacter: (id: string) => Promise<void>;
+  modifyCharacter: (id: string, char: Character) => Promise<void>;
 };
 
 const initialValue: UserContextType = {
@@ -28,7 +30,9 @@ const initialValue: UserContextType = {
   isLoggedIn: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   fetchUserData: () => new Promise(() => {}),
-  updateCharacters: () => new Promise(() => {})
+  fetchCharacters: () => new Promise(() => {}),
+  removeCharacter: () => new Promise(() => {}),
+  modifyCharacter: () => new Promise(() => {})
 };
 
 const UserContext = createContext<UserContextType>(initialValue);
@@ -54,7 +58,7 @@ export function UserContextProvider({ children }) {
     });
   };
 
-  const updateCharacters = () => {
+  const fetchCharacters = () => {
     return getCharacters().then((response: AxiosResponse<Character[]>) => {
       const updated = { ...userData, characters: response.data as Character[] };
       setUserData(updated as UserType);
@@ -62,9 +66,14 @@ export function UserContextProvider({ children }) {
   };
 
   const removeCharacter = (id: string) => {
-    return getCharacters().then((response: AxiosResponse<Character[]>) => {
-      const updated = { ...userData, characters: response.data as Character[] };
-      setUserData(updated as UserType);
+    return deleteCharacter(id).catch(() => {
+      console.log('Error while deleting character ', id);
+    });
+  };
+
+  const modifyCharacter = (charId: string, character: Character) => {
+    return updateCharacter(charId, character).catch(() => {
+      console.log('Error while updating character ', charId);
     });
   };
 
@@ -83,7 +92,9 @@ export function UserContextProvider({ children }) {
       isLoginOpen: isLoginModalOpen,
       fetchUserData,
       isLoggedIn,
-      updateCharacters
+      fetchCharacters,
+      removeCharacter,
+      modifyCharacter
     }),
     [userData, isLoginModalOpen, isLoggedIn]
   );

@@ -3,28 +3,32 @@ import { Button } from 'primereact/button';
 import { Menu } from 'primereact/menu';
 import * as React from 'react';
 import { MenuItem, MenuItemCommandEvent } from 'primereact/menuitem';
-import DruidImage from '../../assets/Druid.png';
-import KnightImage from '../../assets/Knight.png';
-import SorcererImage from '../../assets/Sorcerer.png';
-import PaladinImage from '../../assets/Paladin.png';
+import DruidImage from '../../assets/icons/druid-male.png';
+import DruidFemaleImage from '../../assets/icons/druid-female.png';
+import KnightImage from '../../assets/icons/knight-male.png';
+import KnightFemaleImage from '../../assets/icons/knight-female.png';
+import SorcererImage from '../../assets/icons/sorcerer-male.png';
+import SorcererFemaleImage from '../../assets/icons/sorcerer-female.png';
+import PaladinImage from '../../assets/icons/paladin-male.png';
+import PaladinFemaleImage from '../../assets/icons/paladin-female.png';
 import { Character } from '../../types/types';
 import { useUserContext } from '../../contexts/UserContext';
-import { deleteCharacter } from '../../services/tibia-widgets-api';
 
 interface ICharacterCardProps {
   character: Character;
+  onEdit: (char: Character) => void;
 }
 
-function CharacterCard({ character: char }: ICharacterCardProps) {
+function CharacterCard({ character: char, onEdit }: ICharacterCardProps) {
   const menu = useRef<Menu>(null);
-  const { updateCharacters } = useUserContext();
+  const { fetchCharacters, removeCharacter } = useUserContext();
   const contextMenuItems: MenuItem[] = [
     {
       id: char.id,
       label: 'Edit',
       icon: 'pi pi-user-edit',
-      command: (ev: MenuItemCommandEvent) => {
-        console.log(ev);
+      command: () => {
+        onEdit(char);
       }
     },
     {
@@ -32,30 +36,45 @@ function CharacterCard({ character: char }: ICharacterCardProps) {
       label: 'Remove',
       icon: 'pi pi-trash',
       command: (ev: MenuItemCommandEvent) => {
-        removeCharacter(ev.item.id).then(() => updateCharacters());
+        removeCharacter(ev.item.id).then(() => fetchCharacters());
       }
     }
   ];
-  const removeCharacter = (id: string) => {
-    return deleteCharacter(id);
-  };
 
-  const getVocationImage = (vocation: string) => {
+  const getVocationImage = (vocation: string, gender: string) => {
     switch (vocation) {
       case 'Paladin':
-        return PaladinImage;
+        if (gender === 'Male') {
+          return PaladinImage;
+        }
+        return PaladinFemaleImage;
       case 'Knight':
-        return KnightImage;
+        if (gender === 'Male') {
+          return KnightImage;
+        }
+        return KnightFemaleImage;
       case 'Druid':
-        return DruidImage;
+        if (gender === 'Male') {
+          return DruidImage;
+        }
+        return DruidFemaleImage;
       case 'Sorcerer':
       default:
-        return SorcererImage;
+        if (gender === 'Male') {
+          return SorcererImage;
+        }
+        return SorcererFemaleImage;
     }
   };
   return (
     <div className="flex flex-col justify-between shadow-2 p-4 mb-5 lg:mb-0 mr-0 lg:mr-5 surface-card w-60 h-60 hover:surface-0 relative">
-      <img className="w-1/2 self-center" height="170px" alt={char.name} src={getVocationImage(char.vocation)} />
+      <img
+        className="self-center"
+        width="120px"
+        height="120px"
+        alt={char.name}
+        src={getVocationImage(char.vocation, char.gender)}
+      />
       <div>
         <div className="text-xl text-900 font-medium mb-2">{char.name}</div>
         <div className="flex justify-between w-full">

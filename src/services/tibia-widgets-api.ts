@@ -20,7 +20,7 @@ export const validateCode = async (email: string, code: string) => {
 
 export const getUserByEmail = async (email: string) => {
   const data = { email };
-  const result = await withAuth('get', `${HOST}/user`, data).catch((e) => {
+  const result = await withAuth('get', `${HOST}/user`, data).catch(() => {
     localStorage.removeItem('email');
     localStorage.removeItem('token');
   });
@@ -47,6 +47,15 @@ export const deleteCharacter = async (id: string) => {
   return chars;
 };
 
+export const updateCharacter = async (id: string, character: Character) => {
+  const editableFields = Object.assign({}, character);
+  delete editableFields.huntSessions;
+  delete editableFields.id;
+  debugger;
+  const response = await withAuth('patch', `${HOST}/user/characters/${id}`, editableFields);
+  return response.data;
+};
+
 export default {
   login,
   validateCode,
@@ -54,5 +63,6 @@ export default {
   getWorlds,
   addCharacter,
   getCharacters,
+  updateCharacter,
   deleteCharacter
 };
