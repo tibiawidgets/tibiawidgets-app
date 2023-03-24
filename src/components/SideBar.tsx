@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 import { NavLink } from 'react-router-dom';
 import { useUserContext } from '../contexts/UserContext';
 import { AuthDialog } from './AuthDialog/AuthDialog';
+import LoginButton from './LoginButton/LoginButton';
 
 const darshboardMenu = [
   {
@@ -29,7 +30,7 @@ const darshboardMenu = [
 ];
 
 function SideBar() {
-  const { openLoginDialog, closeLoginDialog, isLoginOpen } = useUserContext();
+  const { openLoginDialog, closeLoginDialog, isLoginOpen, isLoggedIn } = useUserContext();
 
   return (
     <div
@@ -57,7 +58,7 @@ function SideBar() {
           ))}
         </ul>
         <div className="absolute bottom-0 p-4 right-0 left-0">
-          <Button className="font-medium w-full" icon="pi pi-user" label="Login" onClick={() => openLoginDialog()} />
+          <LoginButton onClick={() => openLoginDialog()} />
         </div>
       </div>
       <AuthDialog visible={isLoginOpen} onHide={() => closeLoginDialog()} />

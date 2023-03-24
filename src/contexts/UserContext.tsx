@@ -9,6 +9,7 @@ type UserContextType = {
   userData: UserType;
   isLoginOpen: boolean;
   fetchUserData: (email: string) => Promise<void>;
+  isLoggedIn: boolean;
 };
 
 const initialValue: UserContextType = {
@@ -23,6 +24,7 @@ const initialValue: UserContextType = {
     clientOptions: {}
   },
   isLoginOpen: false,
+  isLoggedIn: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   fetchUserData: () => new Promise(() => {})
 };
@@ -31,7 +33,8 @@ const UserContext = createContext<UserContextType>(initialValue);
 
 export function UserContextProvider({ children }) {
   const [userData, setUserData] = useState<UserType>(initialValue.userData);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(initialValue.isLoginOpen);
+  const [isLoggedIn, setIsLoggedIn] = useState(initialValue.isLoggedIn);
 
   useEffect(() => {
     if (userData && userData.email) {
@@ -43,7 +46,7 @@ export function UserContextProvider({ children }) {
     return getUserByEmail(email).then((response: AxiosResponse<{ user: UserType }>) => {
       const { user } = response.data;
       setUserData(user);
-
+      setIsLoggedIn(true);
       // save email for persistance
       localStorage.setItem('email', email);
     });
@@ -62,9 +65,10 @@ export function UserContextProvider({ children }) {
       closeLoginDialog,
       userData,
       isLoginOpen: isLoginModalOpen,
-      fetchUserData
+      fetchUserData,
+      isLoggedIn
     }),
-    [userData, isLoginModalOpen]
+    [userData, isLoginModalOpen, isLoggedIn]
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
