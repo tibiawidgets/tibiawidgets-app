@@ -3,10 +3,9 @@ import { Toast } from 'primereact/toast';
 import {
   FileUpload,
   FileUploadHeaderTemplateOptions,
-  FileUploadProps,
+  FileUploadSelectEvent,
   ItemTemplateOptions
 } from 'primereact/fileupload';
-import { Message } from 'primereact/message';
 import { Tag } from 'primereact/tag';
 import { ProgressBar } from 'primereact/progressbar';
 import { Button } from 'primereact/button';
@@ -27,7 +26,39 @@ export default function DropFileZone() {
     });
 
     setTotalSize(_totalSize);
-    setFilesCount((prev) => prev + newFiles.length);
+    setFilesCount((prev) => {
+      return prev + newFiles.length;
+    });
+  };
+
+  const onBeforeDrop = (e: DragEvent) => {
+    const files = e.dataTransfer
+      ? e.dataTransfer.files
+      : e.originalEvent.dataTransfer
+      ? e.originalEvent.dataTransfer.files
+      : e.originalEvent.currentTarget.files;
+    let error = false;
+    Object.keys(files).forEach((idx) => {
+      if (!files[idx].name.match(/(.*\.json|\.txt)$/)) {
+        error = true;
+      }
+    });
+    return !error;
+  };
+
+  const onBeforeSelect = (e: FileUploadSelectEvent) => {
+    const files = e.dataTransfer
+      ? e.dataTransfer.files
+      : e.originalEvent.dataTransfer
+      ? e.originalEvent.dataTransfer.files
+      : e.originalEvent.currentTarget.files;
+    let error = false;
+    Object.keys(files).forEach((idx) => {
+      if (!files[idx].name.match(/(.*\.json|\.txt)$/)) {
+        error = true;
+      }
+    });
+    return !error;
   };
 
   const onTemplateUpload = (e) => {
@@ -123,6 +154,7 @@ export default function DropFileZone() {
     iconOnly: true,
     className: 'custom-cancel-btn p-button-danger p-button-rounded p-button-outlined'
   };
+  const onError = () => {};
 
   return (
     <div>
@@ -137,11 +169,13 @@ export default function DropFileZone() {
         name="huntSessionsUpload"
         url="/api/upload"
         multiple
-        accept="application/json, .txt"
+        accept=".json,.txt"
         maxFileSize={1000000}
         onUpload={onTemplateUpload}
+        onBeforeDrop={onBeforeDrop}
+        onBeforeSelect={onBeforeSelect}
+        onError={onError}
         onSelect={onTemplateSelect}
-        onError={onTemplateClear}
         onClear={onTemplateClear}
         headerTemplate={headerTemplate}
         itemTemplate={itemTemplate}

@@ -51,7 +51,6 @@ export const updateCharacter = async (id: string, character: Character) => {
   const editableFields = Object.assign({}, character);
   delete editableFields.huntSessions;
   delete editableFields.id;
-  debugger;
   const response = await withAuth('patch', `${HOST}/user/characters/${id}`, editableFields);
   return response.data;
 };
