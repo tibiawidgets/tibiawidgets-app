@@ -1,12 +1,12 @@
 {
-  "name": "tibiawidgets-app",
+  "name": "tibia-hunts",
   "version": "1.0.0",
   "license": "MIT",
   "main": "main/index.js",
   "author": {
     "name": "Guillermo Beltran"
   },
-  "description": "Tibia Widgets app for analyzing hunt sessions and save client data.",
+  "description": "Tibia Hunts app for analyzing hunt sessions and save client data.",
   "keywords": [
     "vite",
     "react",
@@ -18,7 +18,7 @@
   "repository": {
     "url": "https://github.com/tibiawidgets/tibiawidgets-app"
   },
-  "productName": "Tibia Widgets app",
+  "productName": "Tibia Hunts app",
   "scripts": {
     "start": "concurrently \"yarn start:vite\" \" yarn start:electron\"",
     "start:vite": "vite",
@@ -69,6 +69,8 @@
     "eslint-plugin-react": "^7.29.4",
     "postcss": "^8.4.12",
     "prettier": "2.6.0",
+    "sass": "^1.60.0",
+    "sass-loader": "^10.1.1",
     "tailwindcss": "^3.0.23",
     "typescript": "^4.6.2"
   },

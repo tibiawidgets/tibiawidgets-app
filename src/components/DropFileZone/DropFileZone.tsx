@@ -20,6 +20,7 @@ export default function DropFileZone() {
   const onTemplateSelect = (e) => {
     let _totalSize = totalSize;
     const { files: newFiles } = e;
+    const nFiles = newFiles.length;
 
     Object.keys(newFiles).forEach((key) => {
       _totalSize += newFiles[key].size || 0;
@@ -27,7 +28,7 @@ export default function DropFileZone() {
 
     setTotalSize(_totalSize);
     setFilesCount((prev) => {
-      return prev + newFiles.length;
+      return prev + nFiles;
     });
   };
 

@@ -1,3 +1,6 @@
+@import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css';
+@import 'primereact/resources/primereact.min.css';
+@import 'primeicons/primeicons.css';
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 @tailwind base;
 @tailwind components;
@@ -45,7 +48,7 @@ body {
 }
 
 .sidebar-container {
-  flex-basis: 280px;
+  flex-basis: 250px;
   height: 100%;
 }
 

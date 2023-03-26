@@ -25,13 +25,13 @@ const messageContent = (
     <div className="ml-2 flex items-center">
       <span className="mr-2">
         You can add your <b>*.JSON</b> and <b>*.txt</b> files exported from the <b>Tibia Client</b> located at
-      </span>{' '}
-      <Tag>...\Tibia\packages\Tibia\log</Tag>
+        <Tag>~\AppData\Local\Tibia\packages\Tibia\log</Tag>
+      </span>
     </div>
   </div>
 );
 
-export default function App({ character }: SessionsContentProps) {
+export default function SessionsContent({ character }: SessionsContentProps) {
   const { userData } = useUserContext();
   const characterHunts = userData.characters.find((char) => char.id === character?.id)?.huntSessions;
   if (!characterHunts?.length) {

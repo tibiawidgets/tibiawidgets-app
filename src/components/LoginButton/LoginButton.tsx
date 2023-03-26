@@ -14,5 +14,14 @@ export default function LoginButton({ onClick }: ILoginButtonProps) {
   if (isLoggedIn) {
     return <div>Welcome {email}</div>;
   }
-  return <Button className="font-medium w-full" icon="pi pi-user" label="Login" onClick={onClick} />;
+  return (
+    <Button
+      className="font-medium w-full"
+      style={{ backgroundColor: 'var(--primary-color)' }}
+      color="green"
+      icon="pi pi-user"
+      label="Login"
+      onClick={onClick}
+    />
+  );
 }

@@ -6,7 +6,7 @@ import { BrowserWindow, app, ipcMain, IpcMainEvent } from 'electron';
 import isDev from 'electron-is-dev';
 
 const height = 920;
-const width = 1080;
+const width = 1200;
 
 function createWindow() {
   // Create the browser window.
@@ -15,6 +15,7 @@ function createWindow() {
     height,
     //  change to false to use AppBar
     frame: false,
+    icon: `${__dirname}/../src/assets/icons/skull-icon.png`,
     show: true,
     resizable: false,
     fullscreenable: true,
