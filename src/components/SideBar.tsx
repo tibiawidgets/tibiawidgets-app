@@ -36,7 +36,8 @@ function SideBar() {
   return (
     <div
       id="app-sidebar-8"
-      className="h-full left-0 top-0 z-1 border-right-1 select-none animation-duration-300 animation-ease-in-out border-white-alpha-10 bg-beige"
+      className="h-full left-0 top-0 z-1 border-right-1 select-none animation-duration-300 animation-ease-in-out border-white-alpha-10"
+      style={{ backgroundImage: 'linear-gradient(60deg, #29323c 0%, #2f3844 100%)' }}
     >
       <div className="flex flex-col h-full relative">
         <div className="flex items-center px-3 flex-shrink-0 mt-4 mb-2">

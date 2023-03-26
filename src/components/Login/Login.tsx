@@ -32,7 +32,7 @@ function Login({ onSubmitSuccess }: LoginType) {
   return (
     <form onSubmit={onSubmit}>
       <div>
-        <div className="p-inputgroup">
+        <div className="p-inputgroup mb-2">
           <span className="p-inputgroup-addon">
             <i className="pi pi-user" />
           </span>
@@ -48,7 +48,7 @@ function Login({ onSubmitSuccess }: LoginType) {
             onChange={onChange}
           />
         </div>
-        <small className="text-gray-500">We will send an email to authenticate you.</small>
+        <small className="text-greenLight">We will send an email to authenticate you.</small>
       </div>
       <div className="">
         <Button
