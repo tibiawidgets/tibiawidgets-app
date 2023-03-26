@@ -8,6 +8,7 @@ import Home from './screens/Home/Home';
 import Characters from './screens/Characters/Characters';
 import 'primeflex/primeflex.css';
 import { UserContextProvider } from './contexts/UserContext';
+import BoostedBanner from './components/BoostedBanner/BoostedBanner';
 
 function App() {
   console.log(window.ipcRenderer);
@@ -50,13 +51,16 @@ function App() {
             <div className="sidebar-container">
               <SideBar />
             </div>
-            <div className="content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/party-loot" element={<PartyLoot />} />
-                <Route path="/hunt-sessions" element={<HuntSessions />} />
-                <Route path="/characters" element={<Characters />} />
-              </Routes>
+            <div className="w-full relative">
+              <BoostedBanner />
+              <div className="content h-full">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/party-loot" element={<PartyLoot />} />
+                  <Route path="/hunt-sessions" element={<HuntSessions />} />
+                  <Route path="/characters" element={<Characters />} />
+                </Routes>
+              </div>
             </div>
           </div>
         </div>
