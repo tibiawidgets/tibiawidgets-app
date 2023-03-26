@@ -10,15 +10,13 @@ export const imagesUrl = 'https://static.tibia.com/images/library/';
 
 export const getBosses = async () => {
   const bosses = await axios.get(`${host}/boostablebosses`);
-  const json = await bosses.json();
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  return json.boostable_bosses;
+  return bosses.data;
 };
 
 export const getCreatures = async () => {
   const creatures = await axios.get(`${host}/creatures`);
-  const json = await creatures.json();
-  return json.creatures;
+  return creatures.data;
 };
 
 export const getRashidLocation = () => {

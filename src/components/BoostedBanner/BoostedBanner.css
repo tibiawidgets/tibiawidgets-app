@@ -50,16 +50,17 @@
   background-size: contain;
   height: 80px;
   font-size: 24px;
-  display: flex;
   align-items: center;
   overflow: hidden;
+  display: flex;
 }
 
 .banner-content {
   white-space: nowrap;
-  display: inline-block;
-  animation: move-left 10s linear infinite;
+  display: flex;
+  /* animation: move-left 10s linear infinite; */
   width: 100%;
+  justify-content: space-between;
 }
 @keyframes move-left {
   0% {
@@ -79,10 +80,20 @@
   width: 100%;
   height: 10px;
 }
+
 .border-1 {
   top: 0;
 }
 
 .border-2 {
   bottom: -4px;
+}
+
+.boss {
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  top: -15px;
+  z-index: 15;
+  cursor: pointer;
 }
