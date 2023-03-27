@@ -6,6 +6,7 @@ import { MenuItem, MenuItemCommandEvent } from 'primereact/menuitem';
 import DruidImage from '../../assets/icons/druid-male.png';
 import DruidFemaleImage from '../../assets/icons/druid-female.png';
 import KnightImage from '../../assets/icons/knight-male.png';
+import Outfits from './outfits';
 import KnightFemaleImage from '../../assets/icons/knight-female.png';
 import SorcererImage from '../../assets/icons/sorcerer-male.png';
 import SorcererFemaleImage from '../../assets/icons/sorcerer-female.png';
@@ -41,30 +42,9 @@ function CharacterCard({ character: char, onEdit }: ICharacterCardProps) {
     }
   ];
 
-  const getVocationImage = (vocation: string, gender: string) => {
-    switch (vocation) {
-      case 'Paladin':
-        if (gender === 'Male') {
-          return PaladinImage;
-        }
-        return PaladinFemaleImage;
-      case 'Knight':
-        if (gender === 'Male') {
-          return KnightImage;
-        }
-        return KnightFemaleImage;
-      case 'Druid':
-        if (gender === 'Male') {
-          return DruidImage;
-        }
-        return DruidFemaleImage;
-      case 'Sorcerer':
-      default:
-        if (gender === 'Male') {
-          return SorcererImage;
-        }
-        return SorcererFemaleImage;
-    }
+  const getVocationImage = (vocation: string, gender = 'Male') => {
+    const entryName = vocation.toLocaleLowerCase() + gender;
+    return Outfits[entryName];
   };
   return (
     <div className="flex flex-col justify-between shadow-2 p-4 mb-5 lg:mb-0 mr-0 lg:mr-5 surface-card w-60 h-60 hover:surface-0 relative">

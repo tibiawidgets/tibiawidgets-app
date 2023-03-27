@@ -6,7 +6,7 @@
 // const host = 'https://api.tibiadata.com';
 const host = 'https://dev.tibiadata.com/v4';
 
-export const imagesUrl = 'https://static.tibia.com/images/library/';
+export const imagesUrl = 'https://static.tibia.com/images/library';
 
 export const getBosses = async () => {
   const bosses = await axios.get(`${host}/boostablebosses`);

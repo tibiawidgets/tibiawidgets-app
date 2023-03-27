@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './BoostedBanner.css';
 import RashidImg from '../../assets/RashidTemplate.gif';
-import { getRashidLocation, getCreatures, getBosses } from '../../services/tibia-api';
+import { getRashidLocation, getCreatures, getBosses, imagesUrl } from '../../services/tibia-api';
 
 export interface IBoostedBannerProps {}
 
@@ -12,41 +12,36 @@ export default function BoostedBanner(props: IBoostedBannerProps) {
 
   React.useEffect(() => {
     getBosses().then((data) => {
-      setBoostedBoss(data.boostable_bosses.boosted);
+      const boosted = data.boostable_bosses.boostable_boss_list.find((creature) => creature.featured === true);
+      setBoostedBoss(boosted);
     });
     getCreatures().then((data) => {
-      setBoostedMonster(data.creatures.boosted);
+      const boosted = data.creatures.creature_list.find((creature) => creature.featured === true);
+      setBoostedMonster(boosted);
     });
   }, []);
 
   return (
-    <div className="banner-box">
+    <div className="banner-box xl:justify-center">
       <div className="corner-tl" />
       <div className="corner-tr" />
       <div className="border-1" />
-      <div className="banner-content">
+      <div className="banner-content xl:justify-around xl:max-w-5xl">
         <span className="flex  items-center">
-          <img src={RashidImg} width={80} alt="rashid" />
+          <img src={RashidImg} width={60} alt="rashid" />
           Rashid is at <span className="ml-2 text-yellow-500 outlined-text">{getRashidLocation()}</span>
         </span>
         <span className="flex items-center">
-          <div className="relative w-20 h-full mr-2">
-            <img className="mr-2 -mt-2 boss" src={boostedBoss.image_url} width={40} height={40} alt="boosted-monster" />
+          <div className="relative w-16 h-full">
+            <img className="" src={boostedBoss.image_url} alt="boosted-monster" />
           </div>
-          Boosted Monster:{' '}
-          <span className="ml-2 text-yellow-500 outlined-text">{boostedBoss.name || 'loading...'}</span>
+          Boosted Boss:&nbsp;<span className="text-yellow-500 outlined-text">{boostedBoss.name || 'loading...'}</span>
         </span>
         <span className="flex items-center">
-          <div className="relative w-28 h-full">
-            <img
-              className="mr-2 -mt-2 boss"
-              src={boostedMonster.image_url}
-              width="60px"
-              height="60px"
-              alt="boosted-monster"
-            />
+          <div className="relative w-16 h-full">
+            <img className="" src={`${imagesUrl}/bloodpriest.gif`} alt="boosted-monster" />
           </div>
-          Boosted Boss:{' '}
+          Boosted Monster:{' '}
           <span className="ml-2 text-yellow-500 outlined-text">{boostedMonster.name || 'loading...'}</span>
         </span>
       </div>
