@@ -27,22 +27,27 @@ export default function BoostedBanner(props: IBoostedBannerProps) {
       <div className="corner-tr" />
       <div className="border-1" />
       <div className="banner-content xl:justify-around xl:max-w-5xl">
-        <span className="flex  items-center">
+        <span className="flex items-center w-1/3">
           <img src={RashidImg} width={60} alt="rashid" />
-          Rashid is at <span className="ml-2 text-yellow-500 outlined-text">{getRashidLocation()}</span>
+          <span className="break-words">
+            Rashid is at <span className="ml-2 text-yellow-500 outlined-text">{getRashidLocation()}</span>
+          </span>
         </span>
-        <span className="flex items-center">
-          <div className="relative w-16 h-full">
-            <img className="" src={boostedBoss.image_url} alt="boosted-monster" />
-          </div>
-          Boosted Boss:&nbsp;<span className="text-yellow-500 outlined-text">{boostedBoss.name || 'loading...'}</span>
+        <span className="flex items-center w-1/3">
+          <img className="w-16" src={boostedBoss.image_url} alt="boosted-monster" />
+          <span className="flex flex-wrap">
+            <span>Boosted Boss:&nbsp;</span>
+            <span className="text-yellow-500 outlined-text sm:flex md:inline-block">
+              {boostedBoss.name || 'loading...'}
+            </span>
+          </span>
         </span>
-        <span className="flex items-center">
-          <div className="relative w-16 h-full">
-            <img className="" src={boostedMonster.image_url} alt="boosted-monster" />
-          </div>
-          Boosted Monster:{' '}
-          <span className="ml-2 text-yellow-500 outlined-text">{boostedMonster.name || 'loading...'}</span>
+        <span className="flex items-center w-1/3">
+          <img className="w-16" src={boostedMonster.image_url} alt="boosted-monster" />
+          <span className="flex flex-wrap">
+            <span>Boosted Monster: </span>
+            <span className="ml-2 text-yellow-500 outlined-text">{boostedMonster.name || 'loading...'}</span>
+          </span>
         </span>
       </div>
       <div className="corner-bl" />
