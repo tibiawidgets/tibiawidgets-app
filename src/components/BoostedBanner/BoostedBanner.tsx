@@ -39,7 +39,7 @@ export default function BoostedBanner(props: IBoostedBannerProps) {
         </span>
         <span className="flex items-center">
           <div className="relative w-16 h-full">
-            <img className="" src={`${imagesUrl}/bloodpriest.gif`} alt="boosted-monster" />
+            <img className="" src={boostedMonster.image_url} alt="boosted-monster" />
           </div>
           Boosted Monster:{' '}
           <span className="ml-2 text-yellow-500 outlined-text">{boostedMonster.name || 'loading...'}</span>

@@ -3,6 +3,7 @@ import { Dialog } from 'primereact/dialog';
 import { CodeValidationForm } from '../CodeValidationForm/CodeValidationForm';
 import Login from '../Login/Login';
 import { LogingIn } from '../LoginIn';
+import Signup from '../Signup/Signup';
 
 export interface IAuthDialogProps {
   visible: boolean;
@@ -11,30 +12,28 @@ export interface IAuthDialogProps {
 
 const STEP_LOGININ = 'loginIn';
 const STEP_VERIFICATION = 'verification';
-const STEP_EMAIL = 'email';
+const STEP_LOGIN = 'login';
+const STEP_SIGNUP = 'signup';
 
-type StepType = typeof STEP_EMAIL | typeof STEP_VERIFICATION | typeof STEP_LOGININ;
+const stepTitles = {
+  [STEP_VERIFICATION]: 'Validate your code',
+  [STEP_LOGININ]: 'Successful validation',
+  [STEP_LOGIN]: 'Login',
+  [STEP_SIGNUP]: 'Create an account'
+};
+
+type StepType = typeof STEP_LOGIN | typeof STEP_VERIFICATION | typeof STEP_LOGININ | typeof STEP_SIGNUP;
 
 export function AuthDialog({ visible, onHide }: IAuthDialogProps) {
-  const [step, setStep] = useState<StepType>('email');
+  const [step, setStep] = useState<StepType>(STEP_LOGIN);
   const [emailTo, setEmailTo] = useState('');
-  const title = useMemo(() => {
-    switch (step) {
-      case 'verification':
-        return 'Validate your code';
-      case 'loginIn':
-        return 'Successful validation';
-      case 'email':
-      default:
-        return 'Enter your email';
-    }
-  }, [step]);
+  const title = stepTitles[step];
   const onEmailSent = (email: string) => {
     setStep('verification');
     setEmailTo(email);
   };
   const onClose = () => {
-    setStep('email');
+    setStep(STEP_LOGIN);
     onHide();
   };
   const onCodeValidated = (token: string) => {
@@ -44,12 +43,17 @@ export function AuthDialog({ visible, onHide }: IAuthDialogProps) {
   const onUserLoaded = () => {
     onClose();
   };
+  const goToCreate = () => setStep(STEP_SIGNUP);
+
   const child = useMemo(() => {
-    if (step === 'email') {
-      return <Login onSubmitSuccess={onEmailSent} />;
+    if (step === STEP_LOGIN) {
+      return <Login onSubmitSuccess={onEmailSent} goToCreate={goToCreate} />;
     }
-    if (step === 'verification') {
+    if (step === STEP_VERIFICATION) {
       return <CodeValidationForm email={emailTo} onSubmitSuccess={onCodeValidated} />;
+    }
+    if (step === STEP_SIGNUP) {
+      return <Signup gotoLogin={() => setStep(STEP_LOGIN)} />;
     }
     return <LogingIn email={emailTo} onSuccessLogin={onUserLoaded} />;
   }, [step, emailTo]);

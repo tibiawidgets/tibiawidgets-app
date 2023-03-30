@@ -1,7 +1,3 @@
-/* eslint-disable prefer-destructuring */
-import { log } from 'electron-log';
-import fs from 'fs-extra';
-import path from 'path';
 import { Session } from '../types/types';
 
 /**
@@ -171,45 +167,4 @@ export function standarizeJson(jsonText: string): Session {
     console.error(`Failed to parse json file `, e);
   }
   return standarizedJson;
-}
-
-export function makeDirectoryCopy(fromPath: string, toPath: string) {
-  if (!fs.existsSync(fromPath)) {
-    log(new Error('Origin path does not exist. Nothing to copy.'));
-    return;
-  }
-  if (!fs.existsSync(toPath)) {
-    log('Destination path does not exist, creating it.');
-    fs.mkdirSync(toPath);
-  }
-  const files = fs.readdirSync(fromPath);
-  files.forEach((fileName) => {
-    const absFromPath = path.join(fromPath, fileName);
-    const newName = `${fileName.split('.')[0]}.json`;
-    const absToPath = path.join(toPath, newName);
-
-    const fileData = fs.readFileSync(absFromPath, 'utf8');
-    // validate extension txt is parsed and JSON standarized
-    const extension = path.extname(fileName);
-    let parsedData: Session = {} as Session;
-    if (extension === '.txt') {
-      parsedData = parsePlainTextToJson(fileData);
-    } else if (extension === '.json') {
-      parsedData = standarizeJson(fileData);
-    }
-    fs.writeFile(absToPath, JSON.stringify(parsedData), 'utf-8', (err) => {
-      if (err) throw err;
-    });
-  });
-  console.log('Files finished copying');
-}
-
-export function copyHuntsFiles(tibiaClientPath: string, tibiaWidgetsPath: string, force: boolean) {
-  const fromPath = path.join(tibiaClientPath, PATH_HUNTS_TIBIA_CLIENT);
-  const toPath = path.join(tibiaWidgetsPath, PATH_HUNTS_TIBIA_WIDGETS);
-  if (!fs.existsSync(toPath) || force) {
-    console.log('Copying hunt files');
-    console.log({ fromPath, toPath });
-    makeDirectoryCopy(fromPath, toPath);
-  }
 }

@@ -8,8 +8,8 @@ const withAuth = async (method: string, url: string, data: any) => {
   return fetch(url, { method, headers: { Authorization: `Bearer ${token}` }, data });
 };
 
-export const login = async (email: string) => {
-  const result = await fetch.post(`${HOST}/login`, { email });
+export const login = async (email: string, password: string) => {
+  const result = await fetch.post(`${HOST}/login`, { email, password });
   return result;
 };
 
