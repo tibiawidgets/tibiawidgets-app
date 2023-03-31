@@ -35,19 +35,6 @@ function HuntSessions() {
   return (
     <div className="w-full">
       <h1 className="section-title outlined-title text-4xl">Solo Hunt Sessions</h1>
-      <Dropdown
-        id="charname"
-        name="charname"
-        value={selectedChar?.name}
-        onChange={handleCharSelect}
-        options={options}
-        optionLabel="name"
-        optionValue="id"
-        placeholder="Select a Character"
-        valueTemplate={selectedCharTemplate}
-        itemTemplate={charOptionTemplate}
-        style={{ width: '250px' }}
-      />
       <SessionsContent character={selectedChar} />
     </div>
   );

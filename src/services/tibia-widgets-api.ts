@@ -52,9 +52,12 @@ export const deleteCharacter = async (id: string) => {
 };
 
 export const updateCharacter = async (id: string, character: Character) => {
-  const editableFields = Object.assign({}, character);
-  delete editableFields.huntSessions;
-  delete editableFields.id;
+  const editableFields = {
+    name: character.name,
+    gender: character.gender,
+    world: character.world,
+    vocation: character.vocation
+  };
   const response = await withAuth('patch', `${HOST}/user/characters/${id}`, editableFields);
   return response.data;
 };
