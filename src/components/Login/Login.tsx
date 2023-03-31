@@ -28,8 +28,10 @@ function Login({ onSubmitSuccess, goToCreate }: LoginType) {
     e.preventDefault();
     setIsLoading(true);
     userLogin(username, password)
-      .then(() => {
-        onSubmitSuccess(username);
+      .then((response) => {
+        const { token, user } = response.data;
+        localStorage.setItem('jwt', token);
+        onSubmitSuccess(user.email);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
@@ -80,7 +82,7 @@ function Login({ onSubmitSuccess, goToCreate }: LoginType) {
       </div>
       <small className="flex justify-center items-center mt-4">
         Don't have an account?{' '}
-        <Button link className="underline text-primary ml-2 text-sm" onClick={goToCreate}>
+        <Button link type="button" className="underline text-primary ml-2 text-sm" onClick={goToCreate}>
           Create one
         </Button>
       </small>

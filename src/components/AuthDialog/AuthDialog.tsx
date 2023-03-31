@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { Dialog } from 'primereact/dialog';
-import { CodeValidationForm } from '../CodeValidationForm/CodeValidationForm';
 import Login from '../Login/Login';
 import { LogingIn } from '../LoginIn';
 import Signup from '../Signup/Signup';
@@ -17,7 +16,7 @@ const STEP_SIGNUP = 'signup';
 
 const stepTitles = {
   [STEP_VERIFICATION]: 'Validate your code',
-  [STEP_LOGININ]: 'Successful validation',
+  [STEP_LOGININ]: 'Successful login',
   [STEP_LOGIN]: 'Login',
   [STEP_SIGNUP]: 'Create an account'
 };
@@ -29,16 +28,12 @@ export function AuthDialog({ visible, onHide }: IAuthDialogProps) {
   const [emailTo, setEmailTo] = useState('');
   const title = stepTitles[step];
   const onEmailSent = (email: string) => {
-    setStep('verification');
+    setStep(STEP_LOGININ);
     setEmailTo(email);
   };
   const onClose = () => {
-    setStep(STEP_LOGIN);
     onHide();
-  };
-  const onCodeValidated = (token: string) => {
-    localStorage.setItem('token', token);
-    setStep('loginIn');
+    setStep(STEP_LOGIN);
   };
   const onUserLoaded = () => {
     onClose();
@@ -48,9 +43,6 @@ export function AuthDialog({ visible, onHide }: IAuthDialogProps) {
   const child = useMemo(() => {
     if (step === STEP_LOGIN) {
       return <Login onSubmitSuccess={onEmailSent} goToCreate={goToCreate} />;
-    }
-    if (step === STEP_VERIFICATION) {
-      return <CodeValidationForm email={emailTo} onSubmitSuccess={onCodeValidated} />;
     }
     if (step === STEP_SIGNUP) {
       return <Signup gotoLogin={() => setStep(STEP_LOGIN)} />;

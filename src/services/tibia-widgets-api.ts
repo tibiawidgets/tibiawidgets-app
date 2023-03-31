@@ -1,5 +1,5 @@
-import fetch from 'axios';
-import { Character } from '../types/types';
+import fetch, { AxiosResponse } from 'axios';
+import { Character, UserType } from '../types/types';
 
 const HOST = 'http://localhost:3000';
 
@@ -8,8 +8,12 @@ const withAuth = async (method: string, url: string, data: any) => {
   return fetch(url, { method, headers: { Authorization: `Bearer ${token}` }, data });
 };
 
-export const login = async (email: string, password: string) => {
-  const result = await fetch.post(`${HOST}/login`, { email, password });
+interface LoginResponse {
+  user: UserType;
+  token: string;
+}
+export const login = async (email: string, password: string): Promise<AxiosResponse<LoginResponse>> => {
+  const result = await fetch.post<LoginResponse>(`${HOST}/login`, { email, password });
   return result;
 };
 

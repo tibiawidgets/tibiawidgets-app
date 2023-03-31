@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useUserContext } from '../contexts/UserContext';
 
 export interface ILogingInProps {
   email: string;
@@ -7,12 +6,9 @@ export interface ILogingInProps {
 }
 
 export function LogingIn({ email, onSuccessLogin }: ILogingInProps) {
-  const { fetchUserData } = useUserContext();
-  React.useEffect(() => {
-    fetchUserData(email).then(() => {
-      onSuccessLogin();
-    });
-  });
+  setTimeout(() => {
+    onSuccessLogin();
+  }, 1000);
   return (
     <div className="flex flex-col items-center">
       <span className="pi pi-spin pi-spinner text-4xl mb-4" />
