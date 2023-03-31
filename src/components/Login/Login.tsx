@@ -1,12 +1,8 @@
 import React, { FormEvent, SyntheticEvent, useRef, useState } from 'react';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { login as userLogin } from '../../services/tibia-widgets-api';
-
-type LoginType = {
-  onSubmitSuccess: (email: string) => void;
-  goToCreate: () => void;
-};
+import { useUserContext } from '../../contexts/UserContext';
+import { LoginType } from '../../types/types';
 
 function Login({ onSubmitSuccess, goToCreate }: LoginType) {
   const [username, setUsername] = useState('');
@@ -14,6 +10,7 @@ function Login({ onSubmitSuccess, goToCreate }: LoginType) {
   const [showPassword, setShowPass] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef(null);
+  const { login: userLogin } = useUserContext();
 
   const onChange = (event: SyntheticEvent<HTMLInputElement>) => {
     if (event.currentTarget.name === 'username') {
@@ -27,11 +24,9 @@ function Login({ onSubmitSuccess, goToCreate }: LoginType) {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    userLogin(username, password)
-      .then((response) => {
-        const { token, user } = response.data;
-        localStorage.setItem('jwt', token);
-        onSubmitSuccess(user.email);
+    return userLogin(username, password)
+      .then(({ email }) => {
+        onSubmitSuccess(email);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
@@ -81,7 +76,7 @@ function Login({ onSubmitSuccess, goToCreate }: LoginType) {
         </div>
       </div>
       <small className="flex justify-center items-center mt-4">
-        Don't have an account?{' '}
+        Don&apos;t have an account?{' '}
         <Button link type="button" className="underline text-primary ml-2 text-sm" onClick={goToCreate}>
           Create one
         </Button>

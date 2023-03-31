@@ -142,3 +142,8 @@ interface PayPalCreateSubscriptionResponse {
   plan_name: string; // The name of the subscription plan
   plan_description: string; // The description of the subscription plan
 }
+
+export type LoginType = {
+  onSubmitSuccess: (email: string) => void;
+  goToCreate: () => void;
+};

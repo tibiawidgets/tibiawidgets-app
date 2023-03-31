@@ -4,11 +4,11 @@ import { Character, UserType } from '../types/types';
 const HOST = 'http://localhost:3000';
 
 const withAuth = async (method: string, url: string, data: any) => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('jwt');
   return fetch(url, { method, headers: { Authorization: `Bearer ${token}` }, data });
 };
 
-interface LoginResponse {
+export interface LoginResponse {
   user: UserType;
   token: string;
 }
@@ -26,7 +26,7 @@ export const getUserByEmail = async (email: string) => {
   const data = { email };
   const result = await withAuth('get', `${HOST}/user`, data).catch(() => {
     localStorage.removeItem('email');
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
   });
   return result;
 };

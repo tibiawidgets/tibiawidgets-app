@@ -1,18 +1,28 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import { Character, UserType } from '../types/types';
-import { getCharacters, getUserByEmail, deleteCharacter, updateCharacter } from '../services/tibia-widgets-api';
+import {
+  getCharacters,
+  getUserByEmail,
+  deleteCharacter,
+  updateCharacter,
+  login as doLogin,
+  LoginResponse
+} from '../services/tibia-widgets-api';
 
 type UserContextType = {
   openLoginDialog: () => void;
   closeLoginDialog: () => void;
   userData: UserType;
   isLoginOpen: boolean;
-  fetchUserData: (email: string) => Promise<void>;
+  fetchUserData?: (email: string) => Promise<void>;
   isLoggedIn: boolean;
-  fetchCharacters: () => Promise<void>;
-  removeCharacter: (id: string) => Promise<void>;
-  modifyCharacter: (id: string, char: Character) => Promise<void>;
+  fetchCharacters?: () => Promise<void>;
+  removeCharacter?: (id: string) => Promise<void>;
+  modifyCharacter?: (id: string, char: Character) => Promise<void>;
+  login: (email: string, password: string) => Promise<AxiosResponse<LoginResponse>>;
+  logout?: () => Promise<void>;
+  signin?: () => Promise<void>;
 };
 
 const initialValue: UserContextType = {
@@ -26,27 +36,23 @@ const initialValue: UserContextType = {
     characters: [],
     clientOptions: {}
   },
+  login: () => new Promise(() => {}),
   isLoginOpen: false,
-  isLoggedIn: false,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  fetchUserData: () => new Promise(() => {}),
-  fetchCharacters: () => new Promise(() => {}),
-  removeCharacter: () => new Promise(() => {}),
-  modifyCharacter: () => new Promise(() => {})
+  isLoggedIn: false
 };
 
 const UserContext = createContext<UserContextType>(initialValue);
 
-export function UserContextProvider({ children }) {
+export function UserContextProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<UserType>(initialValue.userData);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(initialValue.isLoginOpen);
   const [isLoggedIn, setIsLoggedIn] = useState(initialValue.isLoggedIn);
 
   useEffect(() => {
-    if (userData && userData.email) {
+    if (userData.email) {
       fetchUserData(userData.email);
     }
-  }, [userData.email]);
+  }, []);
 
   const fetchUserData = (email: string) => {
     return getUserByEmail(email).then((response: AxiosResponse<{ user: UserType }>) => {
@@ -84,6 +90,21 @@ export function UserContextProvider({ children }) {
     setIsLoginModalOpen(false);
   };
 
+  const login = async (email: string, password: string): Promise<void | AxiosResponse<LoginResponse, any>> => {
+    return doLogin(email, password).then((response) => {
+      const { token, user } = response.data;
+      setUserData(user);
+      setIsLoggedIn(true);
+      localStorage.setItem('email', email);
+      localStorage.setItem('jwt', token);
+      return user;
+    });
+  };
+
+  const logout = async () => {};
+
+  const signin = async () => {};
+
   const value = useMemo(
     () => ({
       openLoginDialog,
@@ -94,7 +115,10 @@ export function UserContextProvider({ children }) {
       isLoggedIn,
       fetchCharacters,
       removeCharacter,
-      modifyCharacter
+      modifyCharacter,
+      login,
+      logout,
+      signin
     }),
     [userData, isLoginModalOpen, isLoggedIn]
   );
