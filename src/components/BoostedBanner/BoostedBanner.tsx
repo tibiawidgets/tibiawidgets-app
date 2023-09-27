@@ -12,11 +12,11 @@ export default function BoostedBanner(props: IBoostedBannerProps) {
 
   React.useEffect(() => {
     getBosses().then((data) => {
-      const boosted = data.boostable_bosses.boostable_boss_list.find((creature) => creature.featured === true);
+      const { boosted } = data.boostable_bosses;
       setBoostedBoss(boosted);
     });
     getCreatures().then((data) => {
-      const boosted = data.creatures.creature_list.find((creature) => creature.featured === true);
+      const { boosted } = data.creatures;
       setBoostedMonster(boosted);
     });
   }, []);
@@ -38,15 +38,15 @@ export default function BoostedBanner(props: IBoostedBannerProps) {
           <span className="flex flex-wrap">
             <span>Boosted Boss:&nbsp;</span>
             <span className="text-yellow-500 outlined-text sm:flex md:inline-block">
-              {boostedBoss.name || 'loading...'}
+              {boostedBoss?.name || 'loading...'}
             </span>
           </span>
         </span>
         <span className="flex items-center w-1/3">
-          <img className="w-16" src={boostedMonster.image_url} alt="boosted-monster" />
+          <img className="w-16" src={boostedMonster?.image_url} alt="boosted-monster" />
           <span className="flex flex-wrap">
             <span>Boosted Monster: </span>
-            <span className="ml-2 text-yellow-500 outlined-text">{boostedMonster.name || 'loading...'}</span>
+            <span className="ml-2 text-yellow-500 outlined-text">{boostedMonster?.name || 'loading...'}</span>
           </span>
         </span>
       </div>
