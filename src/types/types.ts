@@ -147,3 +147,24 @@ export type LoginType = {
   onSubmitSuccess: (email: string) => void;
   goToCreate: () => void;
 };
+
+export type BoostableCreature = {
+  featured: boolean;
+  image_url: string;
+  name: string;
+  race?: string;
+};
+
+export type BoostedBossResponseType = {
+  boostable_bosses: {
+    boostable_boss_list: BoostableCreature[];
+    boosted: BoostableCreature;
+  };
+};
+
+export type BoostedMonsterResponseType = {
+  creatures: {
+    creature_list: BoostableCreature[];
+    boosted: BoostableCreature;
+  };
+};

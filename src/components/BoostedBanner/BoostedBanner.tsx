@@ -1,22 +1,22 @@
 import * as React from 'react';
 import './BoostedBanner.css';
 import RashidImg from '../../assets/RashidTemplate.gif';
-import { getRashidLocation, getCreatures, getBosses, imagesUrl } from '../../services/tibia-api';
+import { getRashidLocation, getCreatures, getBosses } from '../../services/tibia-api';
+import { BoostableCreature, BoostedBossResponseType, BoostedMonsterResponseType } from '../../types/types';
 
 export interface IBoostedBannerProps {}
 
 export default function BoostedBanner(props: IBoostedBannerProps) {
-  const [date, setDate] = React.useState(new Date());
-  const [boostedBoss, setBoostedBoss] = React.useState({});
-  const [boostedMonster, setBoostedMonster] = React.useState({});
+  const [boostedBoss, setBoostedBoss] = React.useState<BoostableCreature>({} as BoostableCreature);
+  const [boostedMonster, setBoostedMonster] = React.useState<BoostableCreature>({} as BoostableCreature);
 
   React.useEffect(() => {
-    getBosses().then((data) => {
-      const { boosted } = data.boostable_bosses;
+    getBosses().then(({ boostable_bosses }: BoostedBossResponseType) => {
+      const { boosted } = boostable_bosses;
       setBoostedBoss(boosted);
     });
-    getCreatures().then((data) => {
-      const { boosted } = data.creatures;
+    getCreatures().then(({ creatures }: BoostedMonsterResponseType) => {
+      const { boosted } = creatures;
       setBoostedMonster(boosted);
     });
   }, []);
